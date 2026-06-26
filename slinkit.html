@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Slink It! — Play in your browser</title>
+<meta name="description" content="Play Slink It!, a modern reinvention of the snake game by CrocByte — free in your browser. Best on desktop." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#08110D;
+    --bg-2:#0E1A14;
+    --panel:#0c1812;
+    --line:#1c3a2a;
+    --snake:#3DE27B;
+    --snake-2:#19B45A;
+    --food:#FF5C6A;
+    --gold:#FFD24A;
+    --ink:#E8F5EC;
+    --haze:#7fa490;
+    --r:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:radial-gradient(120% 90% at 50% 0%,#0d2018,#08110D 70%);
+    color:var(--ink);min-height:100vh;
+    font-family:'IBM Plex Sans',system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;
+    display:flex;flex-direction:column;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:linear-gradient(rgba(61,226,123,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(61,226,123,.06) 1px,transparent 1px);
+    background-size:34px 34px;mask-image:radial-gradient(ellipse 80% 70% at 50% 30%,#000,transparent 80%);
+  }
+  a{color:inherit;text-decoration:none}
+  .mono{font-family:'IBM Plex Mono',monospace}
+  .arcade{font-family:'Press Start 2P',monospace}
+
+  /* top bar */
+  .nav{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;
+    padding:18px 24px;max-width:1000px;margin:0 auto;width:100%}
+  .back{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--haze);transition:color .2s}
+  .back:hover{color:var(--snake)}
+  .badge-pc{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold);
+    border:1px solid rgba(255,210,74,.4);border-radius:20px;padding:5px 12px;letter-spacing:.03em}
+
+  /* hero */
+  .stage{position:relative;z-index:2;flex:1;max-width:1000px;margin:0 auto;width:100%;padding:10px 24px 40px;
+    display:flex;flex-direction:column;align-items:center;text-align:center}
+  .logo{font-family:'Press Start 2P',monospace;font-size:clamp(26px,6vw,52px);line-height:1.1;margin:18px 0 6px;
+    background:linear-gradient(180deg,#7CF7A9,#19B45A);-webkit-background-clip:text;background-clip:text;color:transparent;
+    text-shadow:0 6px 30px rgba(61,226,123,.25);letter-spacing:1px}
+  .tag{color:var(--haze);font-size:15px;max-width:46ch;margin-bottom:6px}
+  .tag b{color:var(--ink);font-weight:500}
+
+  /* game */
+  .gamewrap{position:relative;margin:22px 0 8px;width:min(92vw,520px)}
+  .scoreboard{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px;font-family:'Press Start 2P',monospace}
+  .scoreboard .lab{font-size:9px;color:var(--haze);display:block;margin-bottom:7px;letter-spacing:1px}
+  .scoreboard .val{font-size:20px;color:var(--snake)}
+  .scoreboard .val.gold{color:var(--gold)}
+  .board{position:relative;border:2px solid var(--line);border-radius:var(--r);overflow:hidden;
+    background:var(--panel);box-shadow:0 0 0 6px rgba(61,226,123,.05),0 30px 70px -30px rgba(0,0,0,.9),inset 0 0 60px rgba(0,0,0,.4)}
+  canvas{display:block;width:100%;height:auto;touch-action:none}
+  /* overlay */
+  .overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+    background:rgba(8,17,13,.82);backdrop-filter:blur(3px);text-align:center;padding:24px;transition:opacity .25s}
+  .overlay.hide{opacity:0;pointer-events:none}
+  .overlay .big{font-family:'Press Start 2P',monospace;font-size:clamp(16px,4vw,22px);color:var(--snake);line-height:1.4}
+  .overlay .big.dead{color:var(--food)}
+  .overlay .sm{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--haze)}
+  .play-btn{font-family:'Press Start 2P',monospace;font-size:12px;color:#06140C;background:var(--snake);
+    border:none;border-radius:10px;padding:14px 22px;cursor:pointer;letter-spacing:1px;
+    box-shadow:0 6px 0 var(--snake-2);transition:transform .08s,box-shadow .08s}
+  .play-btn:hover{transform:translateY(-1px)}
+  .play-btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--snake-2)}
+
+  /* controls hint */
+  .hint{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;margin-top:16px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--haze)}
+  .hint kbd{background:var(--bg-2);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:2px 7px;color:var(--ink);font-family:inherit;font-size:11px}
+  .mobile-only{display:none}
+
+  /* actions */
+  .actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:26px}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;
+    color:#06140C;background:var(--snake);padding:12px 20px;border-radius:9px;transition:transform .2s,box-shadow .2s}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px -10px rgba(61,226,123,.6)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .btn.ghost:hover{border-color:var(--snake);color:var(--snake);box-shadow:none}
+
+  /* about strip */
+  .about{max-width:760px;margin:42px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;width:100%}
+  .feat{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:18px;text-align:left}
+  .feat h3{font-size:15px;margin-bottom:6px;color:var(--snake)}
+  .feat p{font-size:13px;color:var(--haze)}
+  @media(max-width:640px){.about{grid-template-columns:1fr}}
+
+  footer{position:relative;z-index:2;text-align:center;padding:30px 24px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#4f6b5b}
+  footer a{color:var(--haze)}
+
+  @media(max-width:680px){
+    .desktop-only{display:none}
+    .mobile-only{display:flex}
+    .badge-pc{font-size:10px}
+  }
+</style>
+</head>
+<body>
+  <div class="nav">
+    <a class="back" href="index.html">← Back to portfolio</a>
+    <span class="badge-pc">⌨ BEST ON PC</span>
+  </div>
+
+  <main class="stage">
+    <h1 class="logo">SLINK&nbsp;IT!</h1>
+    <p class="tag">A modern reinvention of the snake game by <b>CrocByte</b>. This is a free browser demo — the full game, with <b>ROAM mode</b> and <b>local multiplayer</b>, lives on Android.</p>
+
+    <div class="gamewrap">
+      <div class="scoreboard">
+        <div><span class="lab">SCORE</span><span class="val" id="score">0</span></div>
+        <div style="text-align:right"><span class="lab">BEST</span><span class="val gold" id="best">0</span></div>
+      </div>
+      <div class="board">
+        <canvas id="game" width="480" height="480"></canvas>
+        <div class="overlay" id="overlay">
+          <div class="big" id="ovTitle">SLINK IT!</div>
+          <div class="sm" id="ovMsg">Use the arrow keys or WASD to start</div>
+          <button class="play-btn" id="playBtn">▶ PLAY</button>
+        </div>
+      </div>
+      <div class="hint desktop-only">
+        <span><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd> or <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> &nbsp;move</span>
+        <span><kbd>Space</kbd> &nbsp;start / restart</span>
+      </div>
+      <div class="hint mobile-only">
+        <span>Swipe to steer — but Slink It! is built for a keyboard. Grab a laptop for the real thing.</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <!-- TODO: paste your Play Store link -->
+      <a class="btn" href="https://play.google.com/store/apps/details?id=com.crocz.Slinkit">▸ Get the full game on Play Store</a>
+      <a class="btn ghost" href="index.html#software">← Back to projects</a>
+      <a class="btn ghost" href="https://buymeacoffee.com/SuzCrocz" target="_blank" rel="noopener">☕ Buy me a coffee</a>
+    </div>
+
+    <div class="about">
+      <div class="feat"><h3>ROAM mode</h3><p>A scrolling camera and live minimap let the arena stretch far beyond the screen.</p></div>
+      <div class="feat"><h3>Local multiplayer</h3><p>Play head-to-head over Google Nearby Connections, with client-side prediction.</p></div>
+      <div class="feat"><h3>Built in Kotlin</h3><p>Jetpack Compose and Material 3, shipped to the Play Store under CrocByte.</p></div>
+    </div>
+  </main>
+
+  <footer>
+    SLINK IT! · A CrocByte game · <a href="index.html">sushyanthg.online</a> — designed for desktop
+  </footer>
+
+<script>
+  (function(){
+    var cv = document.getElementById('game');
+    var ctx = cv.getContext('2d');
+    var scoreEl = document.getElementById('score');
+    var bestEl = document.getElementById('best');
+    var overlay = document.getElementById('overlay');
+    var ovTitle = document.getElementById('ovTitle');
+    var ovMsg = document.getElementById('ovMsg');
+    var playBtn = document.getElementById('playBtn');
+
+    var GRID = 20;        // logical cells per side
+    var BASE = 480;       // logical canvas size
+    var cell = BASE / GRID;
+
+    // crisp scaling for hi-dpi
+    function fit(){
+      var dpr = Math.min(2, window.devicePixelRatio || 1);
+      cv.width = BASE * dpr;
+      cv.height = BASE * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    fit();
+
+    var snake, dir, nextDir, food, score, best = 0, speed, acc, last, state;
+    // state: 'ready' | 'playing' | 'over'
+
+    function rand(n){ return Math.floor(Math.random()*n); }
+    function spawnFood(){
+      var p;
+      do { p = {x:rand(GRID), y:rand(GRID)}; }
+      while (snake.some(function(s){ return s.x===p.x && s.y===p.y; }));
+      return p;
+    }
+
+    function reset(){
+      snake = [{x:9,y:10},{x:8,y:10},{x:7,y:10}];
+      dir = {x:1,y:0}; nextDir = {x:1,y:0};
+      food = spawnFood();
+      score = 0; speed = 135; acc = 0;
+      state = 'ready';
+      scoreEl.textContent = '0';
+      showOverlay('SLINK IT!', 'Use the arrow keys or WASD to start', '▶ PLAY', false);
+      draw();
+    }
+
+    function showOverlay(title, msg, btn, dead){
+      ovTitle.textContent = title;
+      ovTitle.className = 'big' + (dead ? ' dead' : '');
+      ovMsg.textContent = msg;
+      playBtn.textContent = btn;
+      overlay.classList.remove('hide');
+    }
+    function hideOverlay(){ overlay.classList.add('hide'); }
+
+    function startGame(){
+      if(state === 'over') reset();
+      state = 'playing';
+      last = performance.now();
+      hideOverlay();
+    }
+
+    function step(){
+      dir = nextDir;
+      var head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
+      if(head.x<0 || head.y<0 || head.x>=GRID || head.y>=GRID ||
+         snake.some(function(s){ return s.x===head.x && s.y===head.y; })){
+        state = 'over';
+        if(score > best){ best = score; bestEl.textContent = best; }
+        showOverlay('GAME OVER', 'You scored ' + score + '. Press space or play to slink again.', '↻ PLAY AGAIN', true);
+        return;
+      }
+      snake.unshift(head);
+      if(head.x===food.x && head.y===food.y){
+        score++; scoreEl.textContent = score;
+        if(speed > 70) speed -= 2;
+        food = spawnFood();
+      } else {
+        snake.pop();
+      }
+    }
+
+    function rr(x,y,w,h,r){
+      ctx.beginPath();
+      ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
+      ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath();
+    }
+
+    function draw(){
+      ctx.clearRect(0,0,BASE,BASE);
+      // subtle grid
+      ctx.strokeStyle = 'rgba(61,226,123,0.05)';
+      ctx.lineWidth = 1;
+      for(var i=1;i<GRID;i++){
+        ctx.beginPath(); ctx.moveTo(i*cell,0); ctx.lineTo(i*cell,BASE); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0,i*cell); ctx.lineTo(BASE,i*cell); ctx.stroke();
+      }
+      // food (glowing)
+      var fx = food.x*cell + cell/2, fy = food.y*cell + cell/2;
+      ctx.save();
+      ctx.shadowColor = '#FF5C6A'; ctx.shadowBlur = 16;
+      ctx.fillStyle = '#FF5C6A';
+      ctx.beginPath(); ctx.arc(fx, fy, cell*0.32, 0, Math.PI*2); ctx.fill();
+      ctx.restore();
+      // snake
+      for(var s=snake.length-1; s>=0; s--){
+        var seg = snake[s];
+        var t = s/Math.max(1,snake.length-1);
+        var pad = 2;
+        if(s===0){
+          ctx.save();
+          ctx.shadowColor = '#3DE27B'; ctx.shadowBlur = 14;
+          ctx.fillStyle = '#7CF7A9';
+          rr(seg.x*cell+pad, seg.y*cell+pad, cell-2*pad, cell-2*pad, 6); ctx.fill();
+          ctx.restore();
+          // eyes
+          ctx.fillStyle = '#06140C';
+          var ex = seg.x*cell + cell/2, ey = seg.y*cell + cell/2;
+          var ox = dir.x*cell*0.16, oy = dir.y*cell*0.16;
+          var px = -dir.y*cell*0.16, py = dir.x*cell*0.16;
+          ctx.beginPath(); ctx.arc(ex+ox+px, ey+oy+py, cell*0.07, 0, Math.PI*2); ctx.fill();
+          ctx.beginPath(); ctx.arc(ex+ox-px, ey+oy-py, cell*0.07, 0, Math.PI*2); ctx.fill();
+        } else {
+          // gradient body from bright to deep green along the tail
+          var g = Math.round(226 - t*90), b = Math.round(123 - t*40);
+          ctx.fillStyle = 'rgb(' + Math.round(61 - t*20) + ',' + g + ',' + b + ')';
+          rr(seg.x*cell+pad, seg.y*cell+pad, cell-2*pad, cell-2*pad, 5); ctx.fill();
+        }
+      }
+    }
+
+    function loop(now){
+      requestAnimationFrame(loop);
+      if(state === 'playing'){
+        acc += now - last; last = now;
+        while(acc >= speed){
+          step(); acc -= speed;
+          if(state !== 'playing') break;
+        }
+      } else {
+        last = now;
+      }
+      draw();
+    }
+
+    // ── input ──
+    var KEY = {
+      ArrowUp:[0,-1], ArrowDown:[0,1], ArrowLeft:[-1,0], ArrowRight:[1,0],
+      w:[0,-1], s:[0,1], a:[-1,0], d:[1,0], W:[0,-1], S:[0,1], A:[-1,0], D:[1,0]
+    };
+    window.addEventListener('keydown', function(e){
+      if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].indexOf(e.key) !== -1) e.preventDefault();
+      if(e.key === ' ' || e.key === 'Enter'){
+        if(state !== 'playing') startGame();
+        return;
+      }
+      var k = KEY[e.key];
+      if(!k) return;
+      if(state !== 'playing') startGame();
+      var nd = {x:k[0], y:k[1]};
+      if(nd.x === -dir.x && nd.y === -dir.y) return; // no 180
+      nextDir = nd;
+    });
+
+    playBtn.addEventListener('click', startGame);
+
+    // ── touch / swipe ──
+    var tsx=0, tsy=0;
+    cv.addEventListener('touchstart', function(e){ var t=e.touches[0]; tsx=t.clientX; tsy=t.clientY; }, {passive:true});
+    cv.addEventListener('touchmove', function(e){ e.preventDefault(); }, {passive:false});
+    cv.addEventListener('touchend', function(e){
+      var t = e.changedTouches[0];
+      var dx = t.clientX - tsx, dy = t.clientY - tsy;
+      if(Math.abs(dx) < 18 && Math.abs(dy) < 18){ if(state !== 'playing') startGame(); return; }
+      if(state !== 'playing') startGame();
+      var nd = Math.abs(dx) > Math.abs(dy) ? {x:dx>0?1:-1,y:0} : {x:0,y:dy>0?1:-1};
+      if(!(nd.x === -dir.x && nd.y === -dir.y)) nextDir = nd;
+    }, {passive:true});
+
+    window.addEventListener('resize', fit);
+
+    reset();
+    requestAnimationFrame(loop);
+  })();
+</script>
+</body>
+</html>

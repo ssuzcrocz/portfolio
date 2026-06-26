@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Sushyanth Gali — Aerospace Engineer</title>
+<title>Sushyanth Gali — Aerospace Engineer & Developer</title>
+<meta name="description" content="Aerospace engineer (UAV design, DGCA certification, GNSS navigation) and indie Android developer. M.Sc. at Vilnius Tech. Portfolio, projects, and the studio CrocByte." />
 <meta name="description" content="Aerospace engineer specialising in UAV design, certification, and GNSS navigation — and indie software developer under the studio CrocByte." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -55,6 +56,8 @@
     background:rgba(10,19,32,.85);backdrop-filter:blur(10px);
     font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.07em;color:var(--haze)}
   .topbar-in{max-width:var(--maxw);margin:0 auto;padding:0 26px;height:44px;display:flex;align-items:center;justify-content:space-between}
+  .topbar .play-pill{display:inline-flex;align-items:center;gap:6px;color:#06140C;background:var(--cyan);padding:4px 12px;border-radius:20px;font-weight:600;margin-left:18px;transition:transform .15s,box-shadow .15s}
+.topbar .play-pill:hover{transform:translateY(-1px);box-shadow:0 6px 16px -6px rgba(86,201,238,.6)}
   .topbar b{color:var(--ink);font-weight:500}
   .topbar .sq{display:inline-block;width:8px;height:8px;background:var(--cyan);margin-right:9px;vertical-align:0;box-shadow:0 0 8px var(--cyan)}
   .topbar .right span+span{margin-left:18px}
@@ -257,6 +260,10 @@
 
   .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
   .reveal.in{opacity:1;transform:none}
+  .pc-note{display:none}
+  @media(max-width:900px){
+    .pc-note{display:flex;align-items:center;gap:8px;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.04em;color:var(--bg);background:var(--amber);padding:7px 14px;text-align:center;line-height:1.4}
+  }
   :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:4px}
 
   @media(prefers-reduced-motion:reduce){
@@ -266,21 +273,23 @@
 </style>
 </head>
 <body>
+  <div class="pc-note">◇ This site is designed for desktop — best viewed on a larger screen.</div>
 
   <div class="topbar">
     <div class="topbar-in">
       <div><span class="sq"></span><b>DWG · SUSHYANTH GALI</b> — AEROSPACE ENGINEER</div>
-      <div class="right"><span>SCALE 1:1</span><span class="dim">REV 2026</span><span>VILNIUS, LT</span></div>
+      <div class="right"><a class="play-pill" href="slinkit.html">▶ Play Slink It!</a><span>SCALE 1:1</span><span class="dim">REV 2026</span><span>VILNIUS, LT</span></div>
     </div>
   </div>
 
   <nav class="rail" aria-label="Sheets">
     <a href="#profile"><span class="tick"></span><span class="lbl">01 Profile</span></a>
     <a href="#experience"><span class="tick"></span><span class="lbl">02 Experience</span></a>
-    <a href="#hardware"><span class="tick"></span><span class="lbl">03 Hardware</span></a>
-    <a href="#software"><span class="tick"></span><span class="lbl">04 Software</span></a>
-    <a href="#specs"><span class="tick"></span><span class="lbl">05 Specs</span></a>
-    <a href="#contact"><span class="tick"></span><span class="lbl">06 Contact</span></a>
+    <a href="#current"><span class="tick"></span><span class="lbl">03 Current Work</span></a>
+    <a href="#hardware"><span class="tick"></span><span class="lbl">04 Hardware</span></a>
+    <a href="#software"><span class="tick"></span><span class="lbl">05 Software</span></a>
+    <a href="#specs"><span class="tick"></span><span class="lbl">06 Specs</span></a>
+    <a href="#contact"><span class="tick"></span><span class="lbl">07 Contact</span></a>
   </nav>
 
   <div class="wrap">
@@ -414,8 +423,73 @@
       </div>
     </section>
 
+    <section class="sheet" id="current">
+      <div class="sheet-head reveal"><span class="sheet-no">Sheet 03</span><h2>Current Work</h2><span class="comment" style="align-self:center">in progress</span></div>
+      <p class="sheet-sub reveal comment">active research · M.Sc. thesis at Vilnius Tech</p>
+      <article class="hw-card reveal" style="border-color:var(--line-2)">
+        <div class="hw-fig">
+          <span class="tag">FIG 3.0 · APPROACH</span>
+          <svg class="bp" viewBox="0 0 280 200" aria-label="GNSS glide-path approach diagram">
+            <!-- ground + runway -->
+            <g class="draw glow" stroke="#56C9EE" stroke-width="2.2" fill="none" stroke-linecap="round">
+              <line x1="30" y1="165" x2="250" y2="165"/>
+            </g>
+            <g class="draw" stroke="#56C9EE" stroke-width="1.4" fill="none">
+              <rect x="214" y="160" width="34" height="6"/>
+            </g>
+            <!-- 3 deg glide path -->
+            <line class="draw glow" x1="40" y1="55" x2="232" y2="162" stroke="#ECC074" stroke-width="2.2"/>
+            <!-- altitude ticks -->
+            <g class="dim" stroke="#3a5c88" stroke-width="1" stroke-dasharray="2 6">
+              <line x1="40" y1="120" x2="250" y2="120"/>
+              <line x1="40" y1="88" x2="250" y2="88"/>
+            </g>
+            <g class="dim mono" font-family="IBM Plex Mono" font-size="8" fill="#5d769a">
+              <text x="14" y="123">1k</text><text x="14" y="91">2k</text>
+            </g>
+            <!-- aircraft on path -->
+            <g class="dim"><path d="M120 110 l9 4 l-9 3 l3 -3 z" fill="#86E0AE"/>
+              <circle cx="124" cy="113" r="9" fill="none" stroke="#86E0AE" stroke-width="1"/></g>
+            <text class="dim mono" x="150" y="70" font-family="IBM Plex Mono" font-size="9" fill="#ECC074" transform="rotate(29 150 70)">SINGLE-FREQ GNSS · 3.0°</text>
+            <!-- satellite -->
+            <g class="dim" stroke="#56C9EE" stroke-width="1" fill="none"><rect x="46" y="26" width="14" height="10" rx="1"/><line x1="40" y1="31" x2="46" y2="31"/><line x1="60" y1="31" x2="66" y2="31"/></g>
+          </svg>
+        </div>
+        <div class="hw-body">
+          <h3>GNSS Glide-Path Generation</h3>
+          <div class="meta">M.SC. THESIS · VILNIUS TECH · IN PROGRESS</div>
+          <p>Reconstructing aircraft approach trajectories from low-cost <b>single-frequency GNSS</b> receivers — using an extended Kalman filter and Hatch carrier-smoothing to recover a usable glide path without expensive dual-frequency hardware. Modelled and validated in MATLAB.</p>
+          <div class="specs"><span class="chip">GNSS</span><span class="chip">Extended Kalman Filter</span><span class="chip">Hatch Filter</span><span class="chip">MATLAB</span></div>
+        </div>
+      </article>
+      <article class="hw-card reveal">
+          <div class="hw-fig">
+            <span class="tag">FIG 3.1 · SYSTEM</span>
+            <svg class="bp" viewBox="0 0 280 200" aria-label="Arduino micro-ERP with AI backend">
+              <rect class="draw glow" x="30" y="60" width="120" height="90" rx="6" stroke="#56C9EE" stroke-width="2.2" fill="none"/>
+              <g class="draw" stroke="#56C9EE" stroke-width="1.4">
+                <line x1="42" y1="60" x2="42" y2="50"/><line x1="54" y1="60" x2="54" y2="50"/><line x1="66" y1="60" x2="66" y2="50"/><line x1="78" y1="60" x2="78" y2="50"/>
+              </g>
+              <rect class="draw glow" x="64" y="92" width="44" height="30" rx="3" stroke="#86E0AE" stroke-width="1.7" fill="none"/>
+              <text class="dim mono" x="86" y="111" font-family="IBM Plex Mono" font-size="8" fill="#86E0AE" text-anchor="middle">UNO Q</text>
+              <line class="draw" x1="150" y1="105" x2="200" y2="105" stroke="#3a5c88" stroke-width="1.4" stroke-dasharray="3 4"/>
+              <rect class="draw glow" x="200" y="86" width="50" height="38" rx="9" stroke="#ECC074" stroke-width="2" fill="none"/>
+              <text class="dim mono" x="225" y="110" font-family="IBM Plex Mono" font-size="12" fill="#ECC074" text-anchor="middle">AI</text>
+              <g class="dim" stroke="#ECC074" stroke-width="1"><line x1="30" y1="168" x2="150" y2="168"/><line x1="30" y1="163" x2="30" y2="173"/><line x1="150" y1="163" x2="150" y2="173"/></g>
+              <text class="dim mono" x="90" y="186" font-family="IBM Plex Mono" font-size="9" fill="#ECC074" text-anchor="middle">EDGE LEDGER</text>
+            </svg>
+          </div>
+          <div class="hw-body">
+            <h3>Dino the Ledger</h3>
+            <div class="meta">MICRO-ERP · ARDUINO UNO Q · AI BACKEND · MVP</div>
+            <p>A lightweight micro-ERP and ledger system running on the Arduino UNO Q, with an AI-assisted backend for bookkeeping and parsing. Built for the Hackster.io Arduino UNO Q challenge, with a dino mascot.</p>
+            <div class="specs"><span class="chip">Arduino UNO Q</span><span class="chip">AI Backend</span><span class="chip">FastAPI</span><span class="chip">Android</span></div>
+          </div>
+        </article>
+    </section>
+
     <section class="sheet" id="hardware">
-      <div class="sheet-head reveal"><span class="sheet-no">Sheet 03</span><h2>Hardware</h2></div>
+      <div class="sheet-head reveal"><span class="sheet-no">Sheet 04</span><h2>Hardware</h2></div>
       <p class="sheet-sub reveal comment">flight &amp; test articles — scroll to assemble each drawing</p>
 
       <div class="hw">
@@ -502,7 +576,7 @@
     </section>
 
     <section class="sheet" id="software">
-      <div class="sheet-head reveal"><span class="sheet-no">Sheet 04</span><h2>Software</h2><span class="comment" style="align-self:center">CrocByte studio</span></div>
+      <div class="sheet-head reveal"><span class="sheet-no">Sheet 05</span><h2>Software</h2><span class="comment" style="align-self:center">CrocByte studio</span></div>
       <p class="sheet-sub reveal comment">same engineer, different toolchain · tap a file</p>
 
       <div class="ide reveal">
@@ -519,10 +593,14 @@
             <p class="desc">A modern reinvention of the snake game — a scrolling ROAM mode with a live minimap, plus local multiplayer over Google Nearby Connections with client-side prediction and interpolation.</p>
             <div class="code"><span class="cm">// the part I'm proud of</span><br><span class="kw">fun</span> <span class="fn">predictRemote</span>(p: Player) = p.<span class="fn">interpolate</span>(<span class="st">net.lastTick</span>)<span class="cur"></span></div>
             <div class="stack"><span class="chip">Kotlin</span><span class="chip">Jetpack Compose</span><span class="chip">Material 3</span><span class="chip">Nearby API</span></div>
+            <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
+              <a class="btn" href="slinkit.html">▶ Play in browser</a>
+              <a class="btn ghost" href="https://play.google.com/store/apps/details?id=com.crocz.Slinkit">▸ Get on Play Store</a>
+            </div>
           </div>
           <div class="pane" id="dino">
             <h3>Dino the Ledger</h3>
-            <p class="desc">A lightweight ledger / ERP app with a 1-bit pixel mascot and a FastAPI backend — built for the Arduino UNO Q challenge.</p>
+            <p class="desc">A lightweight ledger / ERP app with a Dino mascot and a FastAPI backend — built for the Arduino UNO Q challenge.</p>
             <div class="code"><span class="kw">from</span> fastapi <span class="kw">import</span> FastAPI <span class="cm"># backend</span><br>app = <span class="fn">FastAPI</span>()<span class="cur"></span></div>
             <div class="stack"><span class="chip">Android</span><span class="chip">FastAPI</span><span class="chip">Arduino</span></div>
           </div>
@@ -532,7 +610,7 @@
     </section>
 
     <section class="sheet" id="specs">
-      <div class="sheet-head reveal"><span class="sheet-no">Sheet 05</span><h2>Specifications</h2></div>
+      <div class="sheet-head reveal"><span class="sheet-no">Sheet 06</span><h2>Specifications</h2></div>
       <p class="sheet-sub reveal comment">bill of materials — tools &amp; skills</p>
       <div class="specsheet reveal">
         <div class="sp-col"><h4>CAD &amp; Simulation</h4><div class="row"><span class="chip">CATIA V5/V6</span><span class="chip">SolidWorks</span><span class="chip">Fusion 360</span><span class="chip">Ansys</span><span class="chip">PrePoMax</span><span class="chip">XFLR5</span><span class="chip">Mission Planner</span></div></div>
@@ -543,14 +621,14 @@
     </section>
 
     <section class="sheet contact" id="contact">
-      <div class="sheet-no reveal">Sheet 06 · Sign-off</div>
+      <div class="sheet-no reveal">Sheet 07 · Sign-off</div>
       <h2 class="reveal">Let's build something.</h2>
       <p class="reveal">Open to aerospace roles, hardware collaborations, and interesting software. Drawing's approved — reach out.</p>
       <div class="links reveal">
         <a class="btn" href="mailto:sushyanth25@gmail.com">✉ sushyanth25@gmail.com</a>
         <a class="btn ghost" href="#REPLACE_LINKEDIN">in LinkedIn</a>
-        <a class="btn ghost" href="#REPLACE_GITHUB">⌥ GitHub</a>
-        <a class="btn ghost" href="#REPLACE_PLAY_STORE">▸ Play Store</a>
+        <a class="btn ghost" href="https://github.com/ssuzcrocz">⌥ GitHub</a>
+        <a class="btn ghost" href="https://play.google.com/store/apps/details?id=com.crocz.Slinkit">▸ Play Store</a>
       </div>
     </section>
   </div>
