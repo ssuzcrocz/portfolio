@@ -51,22 +51,19 @@
   a{color:inherit;text-decoration:none}
   .mono{font-family:'IBM Plex Mono',monospace}
 
-  /* ── title-block top bar ───────────────────── */
+/* ── title-block top bar ───────────────────── */
   .topbar{position:sticky;top:0;z-index:50;border-bottom:1px solid var(--line);
     background:rgba(10,19,32,.85);backdrop-filter:blur(10px);
     font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.07em;color:var(--haze)}
   .topbar-in{max-width:var(--maxw);margin:0 auto;padding:0 26px;height:44px;display:flex;align-items:center;justify-content:space-between}
-  .topbar .play-pill{display:inline-flex;align-items:center;gap:6px;color:#06140C;background:var(--cyan);padding:4px 12px;border-radius:20px;font-weight:600;margin-left:18px;transition:transform .15s,box-shadow .15s}
-.topbar .play-pill:hover{transform:translateY(-1px);box-shadow:0 6px 16px -6px rgba(86,201,238,.6)}
+  .topbar-in>div:first-child{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:20px}
+  .topbar .right{display:flex;align-items:center;gap:18px;flex-shrink:0}
+  .topbar .play-pill{display:inline-flex;align-items:center;gap:6px;color:#06140C;background:var(--cyan);padding:4px 12px;border-radius:20px;font-weight:600;transition:transform .15s,box-shadow .15s}
+  .topbar .play-pill:hover{transform:translateY(-1px);box-shadow:0 6px 16px -6px rgba(86,201,238,.6)}
   .topbar b{color:var(--ink);font-weight:500}
   .topbar .sq{display:inline-block;width:8px;height:8px;background:var(--cyan);margin-right:9px;vertical-align:0;box-shadow:0 0 8px var(--cyan)}
-  .topbar .right span+span{margin-left:18px}
   .topbar .right .dim{color:var(--haze-2)}
-  @media(max-width:640px){.topbar .right span:first-child,.topbar .right span:nth-child(2){display:none}}
-
-  .sheet-no{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;letter-spacing:.18em;color:var(--cyan);text-transform:uppercase}
-  .comment{font-family:'IBM Plex Mono',monospace;color:var(--haze-2);font-size:13px}
-  .comment::before{content:"// ";color:var(--amber)}
+  @media(max-width:760px){.topbar .right span{display:none}}
 
   /* ── sheet nav rail ────────────────────────── */
   .rail{position:fixed;left:20px;top:50%;transform:translateY(-50%);z-index:40;display:flex;flex-direction:column;gap:3px}
@@ -302,6 +299,7 @@
         <p class="lede">I design <b>flight hardware</b> from CAD to certification — and I write the <b>software</b> that runs the rest. Two disciplines, one drafting table.</p>
         <div class="cta-row">
           <a class="btn" href="#hardware">▸ View drawing set</a>
+          <a class="btn ghost" href="Sushyanth-Gali-CV.pdf" download>⬇ Download CV</a>
           <button class="btn ghost" id="resetBtn">↻ Reset view</button>
           <button class="btn ghost" id="explodeBtn">❖ Explode view</button>
         </div>
@@ -370,7 +368,8 @@
     <section class="sheet" id="profile">
       <div class="sheet-head reveal"><span class="sheet-no">Sheet 01</span><h2>Profile</h2></div>
       <p class="sheet-sub reveal comment">general arrangement &amp; description</p>
-      <div class="profile-grid reveal">
+      <div class="profile-grid reveal" style="grid-template-columns:150px 1fr 1fr">
+  <img src="me.png" alt="Sushyanth Gali" style="width:150px;height:150px;object-fit:cover;border:1px solid var(--line-2);border-radius:10px;box-shadow:0 0 0 4px rgba(86,201,238,.06)">
         <div>
           <p>I'm an aerospace engineer with hands-on industry experience across the full product lifecycle — <b>CAD design, FEA, vendor sourcing, and DGCA certification</b> of agricultural and testing UAVs.</p>
           <p>I'm currently doing my <b>M.Sc. in Aerospace Engineering at Vilnius Tech</b>, researching aircraft glide-path generation from single-frequency GNSS receivers.</p>
@@ -590,7 +589,7 @@
         <div class="panes">
           <div class="pane show" id="slinkit">
             <h3>Slink It! <span class="badge">live on play store</span></h3>
-            <p class="desc">A modern reinvention of the snake game — a scrolling ROAM mode with a live minimap, plus local multiplayer over Google Nearby Connections with client-side prediction and interpolation.</p>
+            <p class="desc">A modern reinvention of the snake game — a scrolling ROAM mode with a live minimap. Currently building local multiplayer over Google Nearby Connections with client-side prediction and interpolation.</p>
             <div class="code"><span class="cm">// the part I'm proud of</span><br><span class="kw">fun</span> <span class="fn">predictRemote</span>(p: Player) = p.<span class="fn">interpolate</span>(<span class="st">net.lastTick</span>)<span class="cur"></span></div>
             <div class="stack"><span class="chip">Kotlin</span><span class="chip">Jetpack Compose</span><span class="chip">Material 3</span><span class="chip">Nearby API</span></div>
             <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
@@ -625,8 +624,9 @@
       <h2 class="reveal">Let's build something.</h2>
       <p class="reveal">Open to aerospace roles, hardware collaborations, and interesting software. Drawing's approved — reach out.</p>
       <div class="links reveal">
+      <a class="btn" href="Sushyanth-Gali-CV.pdf" download>⬇ Download CV</a>
         <a class="btn" href="mailto:sushyanth25@gmail.com">✉ sushyanth25@gmail.com</a>
-        <a class="btn ghost" href="#REPLACE_LINKEDIN">in LinkedIn</a>
+        <a class="btn ghost" href="https://www.linkedin.com/in/sushyanth-gali-08316022a/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BcoGzLiLmSrSYOeYlantVpw%3D%3D">in LinkedIn</a>
         <a class="btn ghost" href="https://github.com/ssuzcrocz">⌥ GitHub</a>
         <a class="btn ghost" href="https://play.google.com/store/apps/details?id=com.crocz.Slinkit">▸ Play Store</a>
       </div>
