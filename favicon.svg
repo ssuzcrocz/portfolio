@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+    <rect x="3" y="3" width="58" height="58" rx="15" fill="#0A1320" stroke="#56C9EE" stroke-width="2.5"/>
+    <path d="M13 13 h7 M13 13 v7" stroke="#56C9EE" stroke-opacity=".5" stroke-width="2" stroke-linecap="round"/>
+    <text x="32" y="43" text-anchor="middle" font-family="'IBM Plex Sans', Arial, sans-serif" font-weight="700" font-size="30" letter-spacing="-1.5" fill="#56C9EE">SG</text>
+</svg>
